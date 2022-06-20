@@ -5,24 +5,40 @@
       xmlns:uloc="http://nventive.com/localization/1.0"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      mc:Ignorable="d uloc"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+      mc:Ignorable="d uloc">
 
     <Grid>
-        <TextBlock Margin="50"
-                   TextWrapping="NoWrap"
-                   MaxLines="1"
-                   TextTrimming="WordEllipsis"
-                   Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        <ScrollViewer>
+            <StackPanel>
+                <Rectangle x:Name="BeforeHeader"
+                           Height="500"
+                           HorizontalAlignment="Stretch"
+                           Fill="Yellow" />
 
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                <Rectangle Height="500"
+                           HorizontalAlignment="Stretch"
+                           Fill="Orange" />
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                <Rectangle Height="500"
+                           HorizontalAlignment="Stretch"
+                           Fill="OrangeRed" />
 
- 
-
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                   x:Uid="LegalText"
-                   uloc:Localize="Text"/>
+                <Rectangle Height="500"
+                           HorizontalAlignment="Stretch"
+                           Fill="Red" />
+            </StackPanel>
+        </ScrollViewer>
+        <Rectangle Height="50"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Top"
+                   Fill="Green"
+                   local:StickyScrollingBehavior.StickAfterThis="{Binding ElementName=BeforeHeader}"
+                   local:StickyScrollingBehavior.Height="50"
+                   local:StickyScrollingBehavior.Margin="0,10,0,10">
+            <Rectangle.RenderTransform>
+                <TranslateTransform X="0"
+                                    Y="0" />
+            </Rectangle.RenderTransform>
+        </Rectangle>
     </Grid>
 </Page>
