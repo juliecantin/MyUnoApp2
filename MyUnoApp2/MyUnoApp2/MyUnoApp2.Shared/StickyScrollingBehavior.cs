@@ -10,19 +10,6 @@ namespace MyUnoApp2
 {
     public class StickyScrollingBehavior
     {
-        public static int GetHeight(DependencyObject obj)
-        {
-            return (int)obj.GetValue(HeightProperty);
-        }
-
-        public static void SetHeight(DependencyObject obj, int value)
-        {
-            obj.SetValue(HeightProperty, value);
-        }
-
-        public static readonly DependencyProperty HeightProperty =
-            DependencyProperty.RegisterAttached("Height", typeof(int), typeof(StickyScrollingBehavior), new PropertyMetadata(0, OnValueChanged));
-
         public static Thickness GetMargin(DependencyObject obj)
         {
             return (Thickness)obj.GetValue(MarginProperty);
@@ -57,19 +44,16 @@ namespace MyUnoApp2
             if (stickyHeader != null && stickAfterThis != null && margin != default(Thickness))
             {
                 var scrollViewer = GetScrollViewerParent(stickAfterThis);
-                if (scrollViewer != null
-                    && dependencyObject is FrameworkElement fe
-                    && GetHeight(dependencyObject) > 0)
+                if (scrollViewer != null)
                 {
                     void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
                     {
                         UpdateStickyHeader();
                     }
 
-                    void StickAfterThis_Layout(object sender, object e)
+                    void StickAfterThis_SizeChanged(object sender, SizeChangedEventArgs args)
                     {
                         UpdateStickyHeader();
-                        stickAfterThis.LayoutUpdated -= StickAfterThis_Layout;
                     }
 
                     void StickyHeader_Layout(object sender, object e)
@@ -80,22 +64,13 @@ namespace MyUnoApp2
 
                     void UpdateStickyHeader()
                     {
-                        var transform = stickAfterThis.TransformToVisual(scrollViewer);
-                        var stickAfterThisPosition = transform.TransformPoint(new Point(0, 0));
-
                         var translateTransform = stickyHeader.RenderTransform as TranslateTransform;
-                        translateTransform.Y = Math.Max(0, stickAfterThisPosition.Y + stickAfterThis.ActualHeight + margin.Top);
-                        var marginAtBottom = Math.Min(
-                            stickyHeader.ActualHeight + margin.Top + margin.Bottom,
-                            stickAfterThisPosition.Y + stickAfterThis.ActualHeight + stickyHeader.ActualHeight + margin.Top + margin.Bottom
-                        );
-                        stickAfterThis.Margin = new Thickness(0, 0, 0, marginAtBottom);
+                        translateTransform.Y = Math.Max(0, 0 - scrollViewer.VerticalOffset + stickAfterThis.ActualHeight + margin.Top);
                     }
 
                     scrollViewer.ViewChanged += ScrollViewer_ViewChanged;
-                    stickAfterThis.LayoutUpdated += StickAfterThis_Layout;
+                    stickAfterThis.SizeChanged += StickAfterThis_SizeChanged; ;
                     stickyHeader.LayoutUpdated += StickyHeader_Layout;
-
                 }
             }
         }
