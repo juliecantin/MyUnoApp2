@@ -8,7 +8,7 @@
       mc:Ignorable="d uloc">
 
     <Grid>
-        <ScrollViewer>
+        <ScrollViewer x:Name="ScrollViewer">
             <StackPanel>
                 <Rectangle x:Name="BeforeHeader"
                            Height="500"
@@ -33,8 +33,8 @@
                    VerticalAlignment="Top"
                    Fill="Green"
                    local:StickyScrollingBehavior.StickAfterThis="{Binding ElementName=BeforeHeader}"
-                   local:StickyScrollingBehavior.Height="50"
-                   local:StickyScrollingBehavior.Margin="0,10,0,10">
+                   local:StickyScrollingBehavior.Margin="0,10,0,10"
+                   local:StickyScrollingBehavior.IsEnabled="true">
             <Rectangle.RenderTransform>
                 <TranslateTransform X="0"
                                     Y="0" />
