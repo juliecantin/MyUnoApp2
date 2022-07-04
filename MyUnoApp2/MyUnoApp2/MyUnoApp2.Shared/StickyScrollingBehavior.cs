@@ -10,8 +10,8 @@ namespace MyUnoApp2
 {
     /// <summary>
     /// This behavior makes part of the content of scrolled page look as though it becomes a sticky header.
-    /// This is accomplished by placing the content outside of, and on top of, the scrolled content, and adjust its
-    /// vertical position with a TranslateTransform as the ScrollViewer changes positions.
+    /// This is accomplished by toggling the Opacity/IsHitTestVisible of a sticky header at the top of the page,
+    /// placed on top of the scrolled content, based on whether the non-sticky header has disappeared behind it due to scrolling.
     /// </summary>
     public class StickyScrollingBehavior
     {
@@ -26,28 +26,10 @@ namespace MyUnoApp2
         }
 
         /// <summary>
-        /// Gets or sets whether the behavior is enabled or not. If the behavior is disabled, then the control will not be
-        /// affected by changes to TranslateTransform and we will not listen to the ScrollViewer's events.
+        /// Gets or sets whether the behavior is enabled or not. If the behavior is disabled, then we will not listen to the ScrollViewer's events.
         /// </summary>
         public static readonly DependencyProperty IsEnabledProperty =
             DependencyProperty.RegisterAttached("IsEnabled", typeof(bool), typeof(StickyScrollingBehavior), new PropertyMetadata(false, OnValueChanged));
-
-        public static Thickness GetMargin(DependencyObject obj)
-        {
-            return (Thickness)obj.GetValue(MarginProperty);
-        }
-
-        public static void SetMargin(DependencyObject obj, Thickness value)
-        {
-            obj.SetValue(MarginProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the desired margin for the sticky header. For the moment, only the top margin is taken into account by
-        /// the calculations. Must be set to a non-zero value for the behavior to be enabled.
-        /// </summary>
-        public static readonly DependencyProperty MarginProperty =
-            DependencyProperty.RegisterAttached("Margin", typeof(Thickness), typeof(StickyScrollingBehavior), new PropertyMetadata(default(Thickness), OnValueChanged));
 
         public static FrameworkElement GetStickAfterThis(DependencyObject obj)
         {
@@ -70,22 +52,15 @@ namespace MyUnoApp2
         {
             var stickyHeader = dependencyObject as FrameworkElement;
             var stickAfterThis = GetStickAfterThis(dependencyObject);
-            var margin = GetMargin(dependencyObject);
 
             if (stickyHeader != null
                 && stickAfterThis != null
-                && margin != default(Thickness)
                 && GetIsEnabled(stickyHeader))
             {
                 var scrollViewer = GetScrollViewerParent(stickAfterThis);
                 if (scrollViewer != null)
                 {
                     void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
-                    {
-                        UpdateStickyHeader();
-                    }
-
-                    void ScrollViewer_ViewChanging(object sender, ScrollViewerViewChangingEventArgs e)
                     {
                         UpdateStickyHeader();
                     }
@@ -103,23 +78,19 @@ namespace MyUnoApp2
 
                     void UpdateStickyHeader()
                     {
-                        var translateTransform = stickyHeader.RenderTransform as TranslateTransform;
-                        if (scrollViewer.VerticalOffset == 0)
+                        if (scrollViewer.VerticalOffset >= stickAfterThis.ActualHeight + stickAfterThis.Margin.Bottom)
                         {
-                            var offsetFromTransform = stickAfterThis.TransformToVisual(scrollViewer).TransformPoint(new Point(0, 0)).Y;
-                            var scrollViewerActualOffset = stickAfterThis.ActualHeight - offsetFromTransform - 12;
-                            translateTransform.Y = 0 - scrollViewerActualOffset + stickAfterThis.ActualHeight + margin.Top;
+                            stickyHeader.Opacity = 1;
+                            stickyHeader.IsHitTestVisible = true;
                         }
                         else
                         {
-                            translateTransform.Y = Math.Max(
-                                0,
-                                0 - scrollViewer.VerticalOffset + stickAfterThis.ActualHeight + margin.Top);
+                            stickyHeader.Opacity = 0;
+                            stickyHeader.IsHitTestVisible = false;
                         }
                     }
 
                     scrollViewer.ViewChanged += ScrollViewer_ViewChanged;
-                    scrollViewer.ViewChanging += ScrollViewer_ViewChanging;
                     stickAfterThis.SizeChanged += StickAfterThis_SizeChanged;
                     stickyHeader.LayoutUpdated += StickyHeader_Layout;
                 }

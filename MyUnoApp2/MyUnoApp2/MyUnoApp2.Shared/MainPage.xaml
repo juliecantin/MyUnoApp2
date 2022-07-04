@@ -13,32 +13,40 @@
                 <Rectangle x:Name="BeforeHeader"
                            Height="500"
                            HorizontalAlignment="Stretch"
-                           Fill="Yellow" />
+                           Fill="Yellow"
+                           Margin="0,0,0,10"/>
+
+                <!--Non-sticky header-->
+                <Rectangle Height="50"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Top"
+                           Fill="Green"/>
 
                 <Rectangle Height="500"
                            HorizontalAlignment="Stretch"
-                           Fill="Orange" />
+                           Fill="Orange"
+                           Margin="0,10,0,0" />
 
                 <Rectangle Height="500"
                            HorizontalAlignment="Stretch"
-                           Fill="OrangeRed" />
+                           Fill="OrangeRed"
+                           Margin="0,10,0,0"  />
 
                 <Rectangle Height="500"
                            HorizontalAlignment="Stretch"
-                           Fill="Red" />
+                           Fill="Red"
+                           Margin="0,10,0,0"  />
             </StackPanel>
         </ScrollViewer>
+        
+        <!--Sticky header-->
         <Rectangle Height="50"
                    HorizontalAlignment="Stretch"
                    VerticalAlignment="Top"
                    Fill="Green"
+                   Opacity="0"
+                   IsHitTestVisible="False"
                    local:StickyScrollingBehavior.StickAfterThis="{Binding ElementName=BeforeHeader}"
-                   local:StickyScrollingBehavior.Margin="0,10,0,10"
-                   local:StickyScrollingBehavior.IsEnabled="true">
-            <Rectangle.RenderTransform>
-                <TranslateTransform X="0"
-                                    Y="0" />
-            </Rectangle.RenderTransform>
-        </Rectangle>
+                   local:StickyScrollingBehavior.IsEnabled="true" />
     </Grid>
 </Page>
