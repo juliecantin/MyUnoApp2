@@ -16,15 +16,37 @@ namespace MyUnoApp2
         private ScrollViewer _scrollViewer;
         private TextBlock _stickyHeader;
         private TextBlock _nonStickyHeader;
+        private FrameworkElement _beforeStickyHeader;
         private double _nonStickyHeaderInitialFontSize;
         private double? _nonStickyHeaderLeftPadding;
-        private double? _heightBeforeStickyHeader;
 
         public ScrollViewerWithStickyHeader()
         {
         }
 
         #region Properties
+        public static object GetBeforeNonStickyHeaderFor(DependencyObject obj)
+        {
+            return (object)obj.GetValue(BeforeNonStickyHeaderForProperty);
+        }
+
+        public static void SetBeforeNonStickyHeaderFor(DependencyObject obj, object value)
+        {
+            obj.SetValue(BeforeNonStickyHeaderForProperty, value);
+        }
+
+        public static readonly DependencyProperty BeforeNonStickyHeaderForProperty =
+            DependencyProperty.RegisterAttached("BeforeNonStickyHeaderFor", typeof(object), typeof(ScrollViewerWithStickyHeader), new PropertyMetadata(null, BeforeNonStickyHeaderForChanged));
+
+        private static void BeforeNonStickyHeaderForChanged(DependencyObject dObj, DependencyPropertyChangedEventArgs args)
+        {
+            if (args.NewValue is ScrollViewerWithStickyHeader scrollViewer
+                && dObj is FrameworkElement beforeStickyHeader)
+            {
+                scrollViewer._beforeStickyHeader = beforeStickyHeader;
+            }
+        }
+
         public static object GetStickyHeaderFor(DependencyObject obj)
         {
             return (object)obj.GetValue(StickyHeaderForProperty);
@@ -70,7 +92,6 @@ namespace MyUnoApp2
                 scrollViewer._nonStickyHeader = nonStickyHeader;
                 scrollViewer._nonStickyHeaderInitialFontSize = nonStickyHeader.FontSize;
                 scrollViewer._nonStickyHeaderLeftPadding = null;
-                scrollViewer._heightBeforeStickyHeader = null;
             }
         }
 
@@ -108,16 +129,23 @@ namespace MyUnoApp2
             {
                 CalculateOffsets();
 
-                var proportionProgress = _scrollViewer.VerticalOffset / _heightBeforeStickyHeader.Value;
+                var proportionProgress = 
+                    _scrollViewer.VerticalOffset / 
+                    (_beforeStickyHeader.ActualHeight + _beforeStickyHeader.Margin.Top + _beforeStickyHeader.Margin.Bottom 
+                    + _stickyHeader.ActualHeight + _stickyHeader.Margin.Top);
                 if (proportionProgress >= 1)
                 {
                     _stickyHeader.Opacity = 1;
                     _stickyHeader.IsHitTestVisible = true;
+                    _nonStickyHeader.Opacity = 0;
+                    _nonStickyHeader.IsHitTestVisible = false;
                 }
                 else
                 {
                     _stickyHeader.Opacity = 0;
                     _stickyHeader.IsHitTestVisible = false;
+                    _nonStickyHeader.Opacity = 1;
+                    _nonStickyHeader.IsHitTestVisible = true;
 
                     _nonStickyHeader.FontSize = (_stickyHeader.FontSize - _nonStickyHeaderInitialFontSize) * proportionProgress + _nonStickyHeaderInitialFontSize;
 
@@ -129,17 +157,16 @@ namespace MyUnoApp2
 
         private void CalculateOffsets()
         {
-            if (_heightBeforeStickyHeader == null)
+            if (_nonStickyHeaderLeftPadding == null)
             {
                 var distance = _nonStickyHeader.TransformToVisual(_scrollViewer).TransformPoint(new Windows.Foundation.Point(0, 0));
                 _nonStickyHeaderLeftPadding = distance.X;
-                _heightBeforeStickyHeader = distance.Y;
             }
         }
 
         private double GetLeftMargin(double scrollableWidth, double centeredElementWidth, double leftPadding, double proportionProgress)
         {
-            return (scrollableWidth - leftPadding - centeredElementWidth) / 2 * proportionProgress;
+            return ((scrollableWidth - centeredElementWidth) / 2 - leftPadding) * proportionProgress;
         }
 
         private static ScrollViewerWithStickyHeader GetScrollViewerParent(TextBlock obj)

@@ -42,7 +42,8 @@
                            Height="500"
                            HorizontalAlignment="Stretch"
                            Fill="Yellow"
-                           Margin="0,0,0,10" />
+                           Margin="0,0,0,10"
+                           local:ScrollViewerWithStickyHeader.BeforeNonStickyHeaderFor="{Binding ElementName=ScrollViewer}"/>
 
                 <!--Non-sticky header-->
                 <TextBlock Text="This is the header"
