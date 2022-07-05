@@ -17,8 +17,8 @@ namespace MyUnoApp2
         private TextBlock _stickyHeader;
         private TextBlock _nonStickyHeader;
         private double _nonStickyHeaderInitialFontSize;
-        private double _nonStickyHeaderLeftPadding;
-        private double _heightBeforeStickyHeader;
+        private double? _nonStickyHeaderLeftPadding;
+        private double? _heightBeforeStickyHeader;
 
         public ScrollViewerWithStickyHeader()
         {
@@ -43,6 +43,8 @@ namespace MyUnoApp2
             if (args.NewValue is ScrollViewerWithStickyHeader scrollViewer
                 && dObj is TextBlock stickyHeader)
             {
+                stickyHeader.Opacity = 0;
+                stickyHeader.IsHitTestVisible = false;
                 scrollViewer._stickyHeader = stickyHeader;
             }
         }
@@ -67,10 +69,8 @@ namespace MyUnoApp2
             {
                 scrollViewer._nonStickyHeader = nonStickyHeader;
                 scrollViewer._nonStickyHeaderInitialFontSize = nonStickyHeader.FontSize;
-                        
-                var distance = nonStickyHeader.TransformToVisual(scrollViewer).TransformPoint(new Windows.Foundation.Point(0, 0));
-                scrollViewer._nonStickyHeaderLeftPadding = distance.X;
-                scrollViewer._heightBeforeStickyHeader = distance.Y;
+                scrollViewer._nonStickyHeaderLeftPadding = null;
+                scrollViewer._heightBeforeStickyHeader = null;
             }
         }
 
@@ -106,7 +106,9 @@ namespace MyUnoApp2
             if (_stickyHeader != null
                 && _nonStickyHeader != null)
             {
-                var proportionProgress = _scrollViewer.VerticalOffset / _heightBeforeStickyHeader;
+                CalculateOffsets();
+
+                var proportionProgress = _scrollViewer.VerticalOffset / _heightBeforeStickyHeader.Value;
                 if (proportionProgress >= 1)
                 {
                     _stickyHeader.Opacity = 1;
@@ -119,9 +121,19 @@ namespace MyUnoApp2
 
                     _nonStickyHeader.FontSize = (_stickyHeader.FontSize - _nonStickyHeaderInitialFontSize) * proportionProgress + _nonStickyHeaderInitialFontSize;
 
-                    var leftMargin = GetLeftMargin(_scrollViewer.ActualWidth, _stickyHeader.ActualWidth, _nonStickyHeaderLeftPadding, proportionProgress);
+                    var leftMargin = GetLeftMargin(_scrollViewer.ActualWidth, _stickyHeader.ActualWidth, _nonStickyHeaderLeftPadding.Value, proportionProgress);
                     _nonStickyHeader.Margin = new Thickness(leftMargin, 0, 0, 0);
                 }
+            }
+        }
+
+        private void CalculateOffsets()
+        {
+            if (_heightBeforeStickyHeader == null)
+            {
+                var distance = _nonStickyHeader.TransformToVisual(_scrollViewer).TransformPoint(new Windows.Foundation.Point(0, 0));
+                _nonStickyHeaderLeftPadding = distance.X;
+                _heightBeforeStickyHeader = distance.Y;
             }
         }
 
