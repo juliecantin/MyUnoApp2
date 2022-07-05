@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Media;
 namespace MyUnoApp2
 {
     [ContentProperty(Name = "Content")]
-    public class ScrollViewerWithStickyHeader : Control
+    public partial class ScrollViewerWithStickyHeader : Control
     {
         private const string PART_ScrollViewer = "PART_ScrollViewer";
 
