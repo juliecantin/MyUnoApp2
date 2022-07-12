@@ -25,25 +25,22 @@
                 </Setter.Value>
             </Setter>
         </Style>
-    </Page.Resources>
-
-    <Grid>
-        <local:ScrollViewerWithStickyHeader x:Name="ScrollViewer">
-            <local:ScrollViewerWithStickyHeader.StickyHeaderContainer>
-                <Grid>
-                    <TextBlock Text="This is the header"
-                               FontSize="10"
-                               HorizontalAlignment="Center"
-                               local:ScrollViewerWithStickyHeader.StickyHeaderFor="{Binding ElementName=ScrollViewer}" />
-                </Grid>
-            </local:ScrollViewerWithStickyHeader.StickyHeaderContainer>
+        <DataTemplate x:Key="NonStickyHeaderTemplate">
+            <Grid>
+                <TextBlock Text="This is the header"
+                           FontSize="10"
+                           HorizontalAlignment="Center"
+                           local:ScrollViewerWithStickyHeader.StickyHeaderFor="{Binding ElementName=ScrollViewer}" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="ScrollViewerContentTemplate">
             <StackPanel Padding="20">
                 <Rectangle x:Name="BeforeHeader"
                            Height="500"
                            HorizontalAlignment="Stretch"
                            Fill="Yellow"
                            Margin="0,0,0,10"
-                           local:ScrollViewerWithStickyHeader.BeforeNonStickyHeaderFor="{Binding ElementName=ScrollViewer}"/>
+                           local:ScrollViewerWithStickyHeader.BeforeNonStickyHeaderFor="{Binding ElementName=ScrollViewer}" />
 
                 <!--Non-sticky header-->
                 <TextBlock Text="This is the header"
@@ -66,6 +63,20 @@
                            Fill="Red"
                            Margin="0,10,0,0" />
             </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid>
+        <local:ScrollViewerWithStickyHeader x:Name="ScrollViewer">
+            <local:ScrollViewerWithStickyHeader.StickyHeaderContainer>
+                <ContentControl ContentTemplate="{StaticResource NonStickyHeaderTemplate}"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"/>
+            </local:ScrollViewerWithStickyHeader.StickyHeaderContainer>
+            
+            <ContentControl ContentTemplate="{StaticResource ScrollViewerContentTemplate}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"/>
         </local:ScrollViewerWithStickyHeader>
     </Grid>
 </Page>
