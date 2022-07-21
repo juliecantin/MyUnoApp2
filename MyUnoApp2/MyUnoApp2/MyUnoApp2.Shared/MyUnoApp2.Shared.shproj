@@ -11,7 +11,16 @@
   <Import Project="MyUnoApp2.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
   <ItemGroup>
+    <_Globbed_Compile Remove="CommandAwareNavigationItem.cs" />
+    <_Globbed_Compile Remove="NavigationMenuResources.xaml.cs" />
+    <_Globbed_Compile Remove="NavigationViewItem.xaml.cs" />
+    <_Globbed_Compile Remove="NavigationViewItemTemplateSelector.cs" />
+    <_Globbed_Compile Remove="NavItemTemplateSelector.cs" />
     <_Globbed_Compile Remove="ScrollViewerWithStickyHeader.cs" />
     <_Globbed_Compile Remove="TextStickyScrollingBehavior.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <_Globbled_Page Remove="NavigationMenuResources.xaml" />
+    <_Globbled_Page Remove="NavigationViewItem.xaml" />
   </ItemGroup>
 </Project>

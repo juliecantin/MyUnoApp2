@@ -5,78 +5,23 @@
       xmlns:uloc="http://nventive.com/localization/1.0"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
       mc:Ignorable="d uloc">
 
     <Page.Resources>
-        <Style TargetType="local:ScrollViewerWithStickyHeader">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="local:ScrollViewerWithStickyHeader">
-                        <Grid>
-
-                            <ScrollViewer x:Name="PART_ScrollViewer">
-                                <ContentPresenter Content="{TemplateBinding Content}" />
-                            </ScrollViewer>
-                            
-                            <ContentPresenter Content="{TemplateBinding StickyHeaderContainer}"
-                                              IsHitTestVisible="False" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <DataTemplate x:Key="NonStickyHeaderTemplate">
-            <Grid>
-                <TextBlock Text="This is the header"
-                           FontSize="10"
-                           HorizontalAlignment="Center"
-                           local:ScrollViewerWithStickyHeader.StickyHeaderFor="{Binding ElementName=ScrollViewer}" />
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="ScrollViewerContentTemplate">
-            <StackPanel Padding="20">
-                <Rectangle x:Name="BeforeHeader"
-                           Height="500"
-                           HorizontalAlignment="Stretch"
-                           Fill="Yellow"
-                           Margin="0,0,0,10"
-                           local:ScrollViewerWithStickyHeader.BeforeNonStickyHeaderFor="{Binding ElementName=ScrollViewer}" />
-
-                <!--Non-sticky header-->
-                <TextBlock Text="This is the header"
-                           FontSize="20"
-                           HorizontalAlignment="Left"
-                           local:ScrollViewerWithStickyHeader.NonStickyHeaderFor="{Binding ElementName=ScrollViewer}" />
-
-                <Rectangle Height="500"
-                           HorizontalAlignment="Stretch"
-                           Fill="Orange"
-                           Margin="0,10,0,0" />
-
-                <Rectangle Height="500"
-                           HorizontalAlignment="Stretch"
-                           Fill="OrangeRed"
-                           Margin="0,10,0,0" />
-
-                <Rectangle Height="500"
-                           HorizontalAlignment="Stretch"
-                           Fill="Red"
-                           Margin="0,10,0,0" />
-            </StackPanel>
-        </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="NavigationMenuResources.xaml" />
+                <ResourceDictionary Source="NavigationViewItem.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
 
-    <Grid>
-        <local:ScrollViewerWithStickyHeader x:Name="ScrollViewer">
-            <local:ScrollViewerWithStickyHeader.StickyHeaderContainer>
-                <ContentControl ContentTemplate="{StaticResource NonStickyHeaderTemplate}"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Stretch"/>
-            </local:ScrollViewerWithStickyHeader.StickyHeaderContainer>
-            
-            <ContentControl ContentTemplate="{StaticResource ScrollViewerContentTemplate}"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch"/>
-        </local:ScrollViewerWithStickyHeader>
+    <Grid Background="White">
+        <NavigationView PaneDisplayMode="Left"
+                        IsPaneToggleButtonVisible="False"
+                        MenuItemsSource="1234567890"
+                        MenuItemTemplateSelector="{StaticResource NavigationViewItemTemplateSelector}"
+                        HorizontalAlignment="Stretch" />
     </Grid>
 </Page>
