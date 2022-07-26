@@ -25,25 +25,6 @@ namespace MyUnoApp2
         public MainPage()
         {
             this.InitializeComponent();
-            navView.ManipulationMode = ManipulationModes.TranslateX | ManipulationModes.TranslateRailsX | ManipulationModes.TranslateInertia;
-            navView.ManipulationDelta += NavView_ManipulationDelta;
-            navView.ManipulationDelta += NavView_ManipulationDelta2;
-            navView.ManipulationCompleted += NavView_ManipulationCompleted;
-        }
-
-        private void NavView_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
-        {
-            TxtCompletedCumulativeX.Text = e.Cumulative.Translation.X.ToString();
-        }
-
-        private void NavView_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
-        {
-            TxtCumulativeX.Text = e.Cumulative.Translation.X.ToString();
-        }
-
-        private void NavView_ManipulationDelta2(object sender, ManipulationDeltaRoutedEventArgs e)
-        {
-            TxtDeltaX.Text = e.Delta.Translation.X.ToString();
         }
     }
 }

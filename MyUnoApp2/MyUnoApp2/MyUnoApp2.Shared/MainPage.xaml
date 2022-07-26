@@ -6,21 +6,28 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-      mc:Ignorable="d uloc">
+      xmlns:android="http://uno.ui/android"
+      mc:Ignorable="d uloc android">
 
-    <StackPanel Background="White"
-                Padding="60">
-        <TextBlock Text="CumulativeX" />
-        <TextBlock x:Name="TxtCumulativeX" />
-        <TextBlock Text="DeltaX" />
-        <TextBlock x:Name="TxtDeltaX" />
-        <TextBlock Text="Completed cumulative" />
-        <TextBlock x:Name="TxtCompletedCumulativeX" />
-        <NavigationView PaneDisplayMode="LeftCompact"
-                        IsPaneOpen="True"
-                        MenuItemsSource="1234567890"
-                        local:NavigationViewSwipeBehavior.IsAttached="True"
-                        HorizontalAlignment="Stretch"
-                        x:Name="navView"/>
-    </StackPanel>
+    <Page.Resources>
+        <android:Style TargetType="local:SwipeRefresh">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="local:SwipeRefresh">
+                        <Grid>
+                            <local:AndroidNativeSwipeRefresh />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </android:Style>
+    </Page.Resources>
+
+    <Grid DataContext="Hello">
+        <local:SwipeRefresh>
+            <local:SwipeRefresh.Content>
+                <TextBlock Text="{Binding}" />
+            </local:SwipeRefresh.Content>
+        </local:SwipeRefresh>
+    </Grid>
 </Page>
