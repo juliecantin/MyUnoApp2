@@ -17,11 +17,20 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="White">
-        <NavigationView PaneDisplayMode="Left"
-                        IsPaneToggleButtonVisible="False"
+    <StackPanel Background="White"
+                Padding="60">
+        <TextBlock Text="CumulativeX" />
+        <TextBlock x:Name="TxtCumulativeX" />
+        <TextBlock Text="DeltaX" />
+        <TextBlock x:Name="TxtDeltaX" />
+        <TextBlock Text="Completed cumulative" />
+        <TextBlock x:Name="TxtCompletedCumulativeX" />
+        <NavigationView PaneDisplayMode="LeftCompact"
+                        IsPaneOpen="False"
                         MenuItemsSource="1234567890"
                         MenuItemTemplateSelector="{StaticResource NavigationViewItemTemplateSelector}"
-                        HorizontalAlignment="Stretch" />
-    </Grid>
+                        local:NavigationViewSwipeBehavior.IsAttached="True"
+                        HorizontalAlignment="Stretch"
+                        x:Name="navView"/>
+    </StackPanel>
 </Page>
