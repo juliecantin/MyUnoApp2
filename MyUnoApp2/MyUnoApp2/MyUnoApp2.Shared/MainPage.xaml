@@ -8,15 +8,6 @@
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       mc:Ignorable="d uloc">
 
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="NavigationMenuResources.xaml" />
-                <ResourceDictionary Source="NavigationViewItem.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
-
     <StackPanel Background="White"
                 Padding="60">
         <TextBlock Text="CumulativeX" />
@@ -26,9 +17,8 @@
         <TextBlock Text="Completed cumulative" />
         <TextBlock x:Name="TxtCompletedCumulativeX" />
         <NavigationView PaneDisplayMode="LeftCompact"
-                        IsPaneOpen="False"
+                        IsPaneOpen="True"
                         MenuItemsSource="1234567890"
-                        MenuItemTemplateSelector="{StaticResource NavigationViewItemTemplateSelector}"
                         local:NavigationViewSwipeBehavior.IsAttached="True"
                         HorizontalAlignment="Stretch"
                         x:Name="navView"/>
