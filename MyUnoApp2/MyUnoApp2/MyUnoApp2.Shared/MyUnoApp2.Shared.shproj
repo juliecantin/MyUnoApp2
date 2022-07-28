@@ -13,6 +13,7 @@
   <ItemGroup>
     <_Globbed_Compile Remove="AndroidNativeSwipeRefresh.cs" />
     <_Globbed_Compile Remove="CommandAwareNavigationItem.cs" />
+    <_Globbed_Compile Remove="DynamicHeaderBehavior.cs" />
     <_Globbed_Compile Remove="NavigationMenuResources.xaml.cs" />
     <_Globbed_Compile Remove="NavigationSwipeBehavior.cs" />
     <_Globbed_Compile Remove="NavigationViewItem.xaml.cs" />
