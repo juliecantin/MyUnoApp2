@@ -119,7 +119,7 @@ namespace MyUnoApp2
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Cyclomatic complexity", "NV2005", Justification = "Nothing complex here")]
         private static void OnPropertyChanged(DependencyObject dObject, DependencyPropertyChangedEventArgs args)
         {
-            if (dObject is ElevatedView elevatedView)
+            if (dObject is FrameworkElement elevatedView)
             {
                 var scrollViewer = GetScrollViewer(elevatedView) as ScrollViewer;
 
@@ -152,16 +152,22 @@ namespace MyUnoApp2
                         );
 
                         elevatedView.Height = startingHeight + ((targetHeight - startingHeight) * scrollProportion);
-                        elevatedView.Elevation = startingElevation + ((targetElevation - startingElevation) * scrollProportion);
 
-                        if (scrollProportion > 0)
+#if __IOS__
+			            var view = (UIKit.UIView)d;
+			            view.Layer.ShadowRadius = 5.0f;
+			            view.Layer.ShadowOpacity = 0.4f;
+			            view.Layer.ShadowOffset = new CoreGraphics.CGSize(0, 7);
+			            view.Layer.MasksToBounds = false;
+#elif __ANDROID__
+			            var view = (Android.Views.View)elevatedView;
+			            AndroidX.Core.View.ViewCompat.SetElevation(view, (float)Uno.UI.ViewHelper.LogicalToPhysicalPixels(8 * scrollProportion));
+                        if (scrollProportion == 0)
                         {
-                            elevatedView.ShadowColor = shadowColor;
+                            AndroidX.Core.View.ViewCompat.SetElevation(view, 0);
+                            AndroidX.Core.View.ViewCompat.SetTranslationZ(view, 0);
                         }
-                        else
-                        {
-                            elevatedView.ShadowColor = backgroundColor;
-                        }
+#endif
                     }
                 }
 
