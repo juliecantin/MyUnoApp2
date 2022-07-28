@@ -18,8 +18,9 @@
         </Grid.RowDefinitions>
         <toolkit:ElevatedView Height="112"
                               Margin="0,0,0,5"
-                              ShadowColor="Black"
                               Background="Blue"
+                              behaviors:DynamicHeaderBehavior.ShadowColor="Black"
+                              behaviors:DynamicHeaderBehavior.Background="Blue"
                               behaviors:DynamicHeaderBehavior.ScrollViewer="{Binding ElementName=MyScrollViewer}"
                               behaviors:DynamicHeaderBehavior.StartingElevation="0"
                               behaviors:DynamicHeaderBehavior.StartingHeight="112"
@@ -27,6 +28,9 @@
                               behaviors:DynamicHeaderBehavior.TargetHeight="80"
                               behaviors:DynamicHeaderBehavior.TargetScrollOffset="36"
                               Grid.Row="0">
+            <toolkit:ElevatedView.Style>
+                <Style TargetType="toolkit:ElevatedView" />
+            </toolkit:ElevatedView.Style>
             <TextBlock Text="This is the header"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
