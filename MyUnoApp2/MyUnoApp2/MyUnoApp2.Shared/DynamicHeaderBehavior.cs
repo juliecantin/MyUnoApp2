@@ -151,6 +151,7 @@ namespace MyUnoApp2
                                 scrollViewer.VerticalOffset / targetScrollOffset)
                         );
 
+                        // TODO causes stuttering?
                         elevatedView.Height = startingHeight + ((targetHeight - startingHeight) * scrollProportion);
 
 #if __IOS__
