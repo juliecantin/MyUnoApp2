@@ -138,10 +138,9 @@ namespace MyUnoApp2
                         && targetElevation != -1d
                         && targetHeight != -1d
                         && targetScrollOffset != 0d
-                        && shadowColor != null
-                        && backgroundColor != null)
+                        && shadowColor != default(Color)
+                        && backgroundColor != default(Color))
                     {
-                        // TODO add ease-out/ease-in
                         // Do not take negative values (from overscrolling) into account 
                         var scrollProportion = Math.Max(
                             0,
@@ -150,19 +149,31 @@ namespace MyUnoApp2
                                 1,
                                 scrollViewer.VerticalOffset / targetScrollOffset)
                         );
+                        // Ease-out
+                        // scrollProportion = 1 - ((1 - scrollProportion) * (1 - scrollProportion));
 
-                        // TODO causes stuttering?
                         elevatedView.Height = startingHeight + ((targetHeight - startingHeight) * scrollProportion);
 
 #if __IOS__
-			            var view = (UIKit.UIView)d;
-			            view.Layer.ShadowRadius = 5.0f;
-			            view.Layer.ShadowOpacity = 0.4f;
-			            view.Layer.ShadowOffset = new CoreGraphics.CGSize(0, 7);
-			            view.Layer.MasksToBounds = false;
+                        var view = (UIKit.UIView)elevatedView;
+                        if (scrollProportion > 0)
+                        {
+                            view.Layer.ShadowRadius = 5.0f;
+                            view.Layer.ShadowOpacity = 0.4f * (float)scrollProportion;
+                            view.Layer.ShadowOffset = new CoreGraphics.CGSize(0, 7);
+                        }
+                        else
+                        {
+                            view.Layer.ShadowRadius = 0f;
+                            view.Layer.ShadowOpacity = 0f;
+                            view.Layer.ShadowOffset = new CoreGraphics.CGSize(0, 0);
+                        }
+                        view.Layer.MasksToBounds = false;
 #elif __ANDROID__
-			            var view = (Android.Views.View)elevatedView;
-			            AndroidX.Core.View.ViewCompat.SetElevation(view, (float)Uno.UI.ViewHelper.LogicalToPhysicalPixels(8 * scrollProportion));
+                        var view = (Android.Views.View)elevatedView;
+                        view.SetOutlineAmbientShadowColor(Android.Graphics.Color.Argb(128, 0, 0, 0));
+                        view.SetOutlineSpotShadowColor(Android.Graphics.Color.Argb(128, 0, 0, 0));
+                        AndroidX.Core.View.ViewCompat.SetElevation(view, Uno.UI.ViewHelper.LogicalToPhysicalPixels(8 * scrollProportion));
                         if (scrollProportion == 0)
                         {
                             AndroidX.Core.View.ViewCompat.SetElevation(view, 0);
