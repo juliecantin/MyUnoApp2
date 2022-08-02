@@ -14,11 +14,13 @@
     <_Globbed_Compile Remove="AndroidNativeSwipeRefresh.cs" />
     <_Globbed_Compile Remove="CommandAwareNavigationItem.cs" />
     <_Globbed_Compile Remove="DynamicHeaderBehavior.cs" />
+    <_Globbed_Compile Remove="LayoutChangedListener.Android.cs" />
     <_Globbed_Compile Remove="NavigationMenuResources.xaml.cs" />
     <_Globbed_Compile Remove="NavigationSwipeBehavior.cs" />
     <_Globbed_Compile Remove="NavigationViewItem.xaml.cs" />
     <_Globbed_Compile Remove="NavigationViewItemTemplateSelector.cs" />
     <_Globbed_Compile Remove="NavItemTemplateSelector.cs" />
+    <_Globbed_Compile Remove="ScrollChangedListener.cs" />
     <_Globbed_Compile Remove="ScrollViewerWithStickyHeader.cs" />
     <_Globbed_Compile Remove="SwipeRefresh.cs" />
     <_Globbed_Compile Remove="TextStickyScrollingBehavior.cs" />

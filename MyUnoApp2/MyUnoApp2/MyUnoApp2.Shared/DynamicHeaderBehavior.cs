@@ -185,7 +185,20 @@ namespace MyUnoApp2
 
                 if (scrollViewer != null)
                 {
+#if __ANDROID__
+                    var targetHeight = GetTargetHeight(elevatedView);
+                    var targetScrollOffset = GetTargetScrollOffset(elevatedView);
+
+                    if (targetHeight != -1d
+                        && targetScrollOffset != 0d)
+                    {
+                        var view = (Android.Views.View)elevatedView;
+                        //view.AddOnLayoutChangeListener(new LayoutChangedListener(targetHeight, targetScrollOffset));
+                        view.ViewTreeObserver.AddOnScrollChangedListener(new ScrollChangedListener(targetHeight, targetScrollOffset));
+                    }
+#else
                     scrollViewer.ViewChanged += ScrollViewer_ViewChanged;
+#endif
                 }
             }
         }
